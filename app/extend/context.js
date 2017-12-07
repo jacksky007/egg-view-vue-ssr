@@ -1,7 +1,7 @@
 'use strict';
 
-const Cache = require('node-cache');
-const merge = require('lodash.merge')
+const Cache = require('lru-cache');
+const merge = require('lodash.merge');
 const path = require('path');
 
 let cache = null;
@@ -16,7 +16,7 @@ let useCacheIfAllowed = cacheConfig => {
   if (cacheConfig === true) {
     // 默认 cache 选项
     return (cache = new Cache({
-      stdTTL: 20,
+      maxAge: 20,
     }));
   }
 
@@ -25,10 +25,10 @@ let useCacheIfAllowed = cacheConfig => {
   }
 
   if (cacheConfig.set && cacheConfig.get) {
-    return (cache = cacheConfig)
+    return (cache = cacheConfig);
   }
 
-  return (cache = new Cache({ ...cacheConfig, useClones: false }))
+  return (cache = new Cache(cacheConfig));
 };
 
 module.exports = {
@@ -46,7 +46,7 @@ module.exports = {
       renderOptions: {
         runInNewContext: 'once',
       },
-    })
+    });
 
     locals = Object.assign({}, this.app.locals, this.locals, locals);
 
