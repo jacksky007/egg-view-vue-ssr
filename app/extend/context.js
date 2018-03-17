@@ -16,6 +16,7 @@ let useCacheIfAllowed = cacheConfig => {
   if (cacheConfig === true) {
     // 默认 cache 选项
     return (cache = new Cache({
+      max: 100,
       maxAge: 20,
     }));
   }
